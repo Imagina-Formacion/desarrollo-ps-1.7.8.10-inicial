@@ -1,0 +1,64 @@
+services:
+  db:
+    image: mysql:5.7
+    container_name: prestashop_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: prestashop
+      MYSQL_USER: prestashop
+      MYSQL_PASSWORD: prestashop
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prestashop:
+    image: prestashop/prestashop:1.7.8.10
+    container_name: prestashop_web
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      DB_SERVER: db
+      DB_NAME: prestashop
+      DB_USER: prestashop
+      DB_PASSWD: prestashop
+      PS_DEV_MODE: 1
+      PS_INSTALL_AUTO: 0
+      PS_LANGUAGE: es
+      PS_COUNTRY: ES
+      ADMIN_MAIL: admin@prestashop.local
+      ADMIN_PASSWD: admin123
+    volumes:
+      - prestashop_data:/var/www/html
+      - ./custom-modules:/var/www/html/modules/custom
+      - ./custom-themes:/var/www/html/themes/custom
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: prestashop_pma
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+      UPLOAD_LIMIT: 256M
+
+volumes:
+  mysql_data:
+  prestashop_data:
