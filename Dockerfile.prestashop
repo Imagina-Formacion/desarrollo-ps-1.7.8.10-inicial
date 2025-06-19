@@ -1,0 +1,30 @@
+FROM prestashop/prestashop:1.7.8.10
+
+# Instalar dependencias adicionales
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar Xdebug
+RUN pecl install xdebug-3.1.6 \
+    && docker-php-ext-enable xdebug
+
+# Copiar configuración de Apache
+COPY conf/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+# Copiar configuración de Xdebug
+COPY conf/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+# Habilitar mod_rewrite de Apache
+RUN a2enmod rewrite
+
+# Establecer permisos correctos
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+# Exponer puerto
+EXPOSE 80
+
+CMD ["apache2-foreground"]

@@ -20,7 +20,9 @@ services:
       retries: 5
 
   prestashop:
-    image: prestashop/prestashop:1.7.8.10
+    build:
+      context: .
+      dockerfile: Dockerfile.prestashop
     container_name: prestashop_web
     restart: unless-stopped
     depends_on:
@@ -39,10 +41,17 @@ services:
       PS_COUNTRY: ES
       ADMIN_MAIL: admin@prestashop.local
       ADMIN_PASSWD: admin123
+      # Variables para Xdebug
+      XDEBUG_CONFIG: "client_host=host.docker.internal"
+      PHP_IDE_CONFIG: "serverName=prestashop-docker"
     volumes:
       - prestashop_data:/var/www/html
       - ./custom-modules:/var/www/html/modules/custom
       - ./custom-themes:/var/www/html/themes/custom
+      # Montar logs para debugging
+      - ./logs:/var/log
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
