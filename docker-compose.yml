@@ -1,24 +1,4 @@
 services:
-  # Servicio para inicializar PrestaShop la primera vez
-  prestashop-init:
-    image: prestashop/prestashop:1.7.8.10
-    container_name: prestashop_init
-    volumes:
-      - ./prestashop:/var/www/html
-    command: >
-      sh -c "
-        if [ ! -f /var/www/html/index.php ]; then
-          echo 'Copiando archivos de PrestaShop...';
-          cp -r /tmp/prestashop-files/* /var/www/html/ 2>/dev/null ||
-          cp -r /var/www/html-original/* /var/www/html/ 2>/dev/null ||
-          echo 'Archivos ya presentes';
-        else
-          echo 'PrestaShop ya inicializado';
-        fi
-      "
-    profiles:
-      - init
-
   db:
     image: mysql:5.7
     container_name: prestashop_mysql
@@ -90,4 +70,4 @@ services:
 
 volumes:
   mysql_data:
-  prestashop_data_clean:
+  prestashop_data:
