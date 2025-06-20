@@ -26,14 +26,9 @@ TestResults.xml
 logs/
 .DS_Store
 
-# PrestaShop core files (no incluir en el repositorio)
-prestashop/
-
 # Archivos de configuración sensibles
 *.env
 *.env.local
-config/settings.inc.php
-config/config.inc.php
 
 # Docker volumes y datos
 docker-volumes/

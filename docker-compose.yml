@@ -1,4 +1,24 @@
 services:
+  # Servicio para inicializar PrestaShop la primera vez
+  prestashop-init:
+    image: prestashop/prestashop:1.7.8.10
+    container_name: prestashop_init
+    volumes:
+      - ./prestashop:/var/www/html
+    command: >
+      sh -c "
+        if [ ! -f /var/www/html/index.php ]; then
+          echo 'Copiando archivos de PrestaShop...';
+          cp -r /tmp/prestashop-files/* /var/www/html/ 2>/dev/null ||
+          cp -r /var/www/html-original/* /var/www/html/ 2>/dev/null ||
+          echo 'Archivos ya presentes';
+        else
+          echo 'PrestaShop ya inicializado';
+        fi
+      "
+    profiles:
+      - init
+
   db:
     image: mysql:5.7
     container_name: prestashop_mysql
@@ -45,7 +65,7 @@ services:
       XDEBUG_CONFIG: "client_host=host.docker.internal"
       PHP_IDE_CONFIG: "serverName=prestashop-docker"
     volumes:
-      - ./prestashop:/var/www/html
+      - prestashop_data:/var/www/html
       - ./custom-modules:/var/www/html/modules/custom
       - ./custom-themes:/var/www/html/themes/custom
       # Montar logs para debugging
