@@ -9,11 +9,6 @@
             "pathMappings": {
                 "/var/www/html/modules/custom": "${workspaceFolder}/custom-modules",
                 "/var/www/html/themes/custom": "${workspaceFolder}/custom-themes"
-            },
-            "xdebugSettings": {
-                "max_children": 128,
-                "max_data": 512,
-                "max_depth": 3
             }
         }
     ]

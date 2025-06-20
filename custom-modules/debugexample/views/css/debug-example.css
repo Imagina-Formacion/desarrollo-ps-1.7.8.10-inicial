@@ -1,0 +1,62 @@
+/*
+ * CSS para el módulo Debug Example
+ * Archivo: custom-modules/debugexample/views/css/debug-example.css
+ */
+
+.debug-example-info {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    animation: debugFadeIn 0.5s ease-in;
+}
+
+@keyframes debugFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.debug-example-info h4 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.debug-details {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #e9ecef;
+}
+
+.debug-details::-webkit-scrollbar {
+    width: 6px;
+}
+
+.debug-details::-webkit-scrollbar-track {
+    background: #e9ecef;
+    border-radius: 3px;
+}
+
+.debug-details::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 3px;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .debug-example-info {
+        margin: 5px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .debug-details {
+        font-size: 11px;
+        max-height: 150px;
+    }
+}
