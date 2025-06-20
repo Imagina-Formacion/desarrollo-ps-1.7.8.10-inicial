@@ -45,7 +45,7 @@ services:
       XDEBUG_CONFIG: "client_host=host.docker.internal"
       PHP_IDE_CONFIG: "serverName=prestashop-docker"
     volumes:
-      - prestashop_data_clean:/var/www/html
+      - ./prestashop:/var/www/html
       - ./custom-modules:/var/www/html/modules/custom
       - ./custom-themes:/var/www/html/themes/custom
       # Montar logs para debugging
